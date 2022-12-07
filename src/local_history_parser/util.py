@@ -1,8 +1,11 @@
 import datetime
 import logging
 import warnings
-from itertools import filterfalse, tee
+
+from itertools import filterfalse
+from itertools import tee
 from typing import Any, Callable, Dict, Iterable, List, Tuple
+
 
 LOG_LEVELS = [
     logging.ERROR,
@@ -16,16 +19,12 @@ def setup_logging(verbosity: int) -> None:
     """
     Configure default logging facility.
     """
-    logging_level = (
-        LOG_LEVELS[verbosity] if -1 < verbosity < len(LOG_LEVELS) else logging.DEBUG
-    )
+    logging_level = LOG_LEVELS[verbosity] if -1 < verbosity < len(LOG_LEVELS) else logging.DEBUG
     logging.basicConfig(level=logging_level)
     logging.captureWarnings(True)
 
 
-def partition(
-    predicate: Callable[[Any], bool], iterable: Iterable[Any]
-) -> Tuple[Iterable[Any], Iterable[Any]]:
+def partition(predicate: Callable[[Any], bool], iterable: Iterable[Any]) -> Tuple[Iterable[Any], Iterable[Any]]:
     """
     Use a predicate to partition entries into false entries and true entries.
 

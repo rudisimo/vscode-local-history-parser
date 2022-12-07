@@ -1,10 +1,12 @@
-from datetime import datetime, timedelta
+from datetime import datetime
+from datetime import timedelta
 from typing import Any
 
 import pytest
 
 from local_history_parser.util import datetime as module_datetime
 from local_history_parser.util import relative_datetime_factory
+
 
 FAKE_DATETIME = datetime(1999, 12, 31, 23, 59, 59, 999999)
 
@@ -31,9 +33,7 @@ def mock_datetime(monkeypatch: pytest.MonkeyPatch):
         pytest.param("10 years ago", timedelta(days=3650), id="10y-ago"),
     ],
 )
-def test_relative_datetime_factory(
-    input_datetime: str, expected_timedelta: timedelta, mock_datetime: Any
-):
+def test_relative_datetime_factory(input_datetime: str, expected_timedelta: timedelta, mock_datetime: Any):
     patched_datetime = relative_datetime_factory(input=input_datetime)
     expected_datetime = FAKE_DATETIME - expected_timedelta
     assert patched_datetime == expected_datetime
