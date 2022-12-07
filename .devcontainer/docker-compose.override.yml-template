@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  workspace:
+    build:
+      args:
+        # User configuration
+        - USER_SHELL=zsh
+        - USER_VOLUMES=
+            /home/vscode/.local/share/zsh
+
+        # Python dependencies
+        # - PYTHON_VERSION=latest
+        # - PYTHON_DEPS=
+        #     cloudformation-cli
+        #     cloudformation-cli-python-plugin
+        #     cloudformation-cli-typescript-plugin
+
+        # Custom APT packages
+        # - APT_PACKAGES=
+        #     jq
+        #     fzf
+        #     ripgrep
+
+    volumes:
+      # Speed up container creation and reusability by storing user data in volumes.
+      - workspace-zsh:/home/vscode/.local/share/zsh
+
+      # Add external AWS credentials to container.
+      # - ${HOME:-}${USERPROFILE:-}/.aws:/home/vscode/.aws:cached
+
+      # Add external terminal configuration to container.
+      # - ${HOME:-}${USERPROFILE:-}/.zshrc:/home/vscode/.zshrc:ro
+      # - ${HOME:-}${USERPROFILE:-}/.bashrc:/home/vscode/.bashrc:ro
+      # - ${HOME:-}${USERPROFILE:-}/.profile:/home/vscode/.profile:ro
+      # - ${HOME:-}${USERPROFILE:-}/.oh-my-zsh:/home/vscode/.oh-my-zsh:ro
+      # - ${HOME:-}${USERPROFILE:-}/.tmux/.tmux.conf:/home/vscode/.tmux.conf:ro
+      # - ${HOME:-}${USERPROFILE:-}/.tmux.conf.local:/home/vscode/.tmux.conf.local:ro
+      # - ${HOME:-}${USERPROFILE:-}/.ssh:/home/vscode/.ssh:ro
+
+    # Uncomment the next four lines if you will use a ptrace-based debuggers like C++, Go, and Rust.
+    # cap_add:
+    #  - SYS_PTRACE
+    # security_opt:
+    #   - seccomp:unconfined
+
+    # If you want add a non-root user to your Dockerfile, you can use the "remoteUser"
+    # property in devcontainer.json to cause VS Code its sub-processes (terminals, tasks,
+    # debugging) to execute as the user. Uncomment the next line if you want the entire
+    # container to run as this user instead. Note that, on Linux, you may need to
+    # ensure the UID and GID of the container user you create matches your local user.
+    # See https://aka.ms/vscode-remote/containers/non-root for details.
+    # user: vscode
+
+volumes:
+  workspace-zsh:

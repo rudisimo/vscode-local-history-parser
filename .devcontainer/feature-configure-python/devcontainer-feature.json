@@ -1,0 +1,28 @@
+{
+    "id": "feature-configure-python",
+    "version": "0.1.0",
+    "name": "Configure Python",
+    "description": "Installs one or more versions of Python using pyenv.",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance"
+            ]
+        }
+    },
+    "options": {
+        "version": {
+            "type": "string",
+            "enum": [
+                "latest",
+                "3.10",
+                "3.9",
+                "3.8",
+                "3.7"
+            ],
+            "default": "latest",
+            "description": "Enter Python version to install globally"
+        }
+    }
+}
