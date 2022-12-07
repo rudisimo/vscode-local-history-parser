@@ -3,10 +3,14 @@ from __future__ import annotations
 import json
 import re
 import warnings
+
 from contextlib import contextmanager
-from dataclasses import InitVar, dataclass, field
+from dataclasses import InitVar
+from dataclasses import dataclass
+from dataclasses import field
 from datetime import datetime
-from enum import IntEnum, auto
+from enum import IntEnum
+from enum import auto
 from pathlib import Path
 from sys import stdout
 from typing import Any, Callable, Iterator, List, Mapping, Optional, TextIO
@@ -37,9 +41,7 @@ def build_record_filter(
     return predicate
 
 
-def build_snapshot_filter(
-    since: Optional[str], until: Optional[str]
-) -> Callable[[HistorySnapshot], bool]:
+def build_snapshot_filter(since: Optional[str], until: Optional[str]) -> Callable[[HistorySnapshot], bool]:
     """
     Create a history snapshot filter function.
     """
@@ -102,16 +104,12 @@ class HistoryRecord(ExtendedDataclass):
     # Public properties
     source_file: Path = field(init=False, repr=False, hash=False, compare=False)
     target_file: Path = field(init=False, repr=False, hash=False, compare=False)
-    snapshots: List[HistorySnapshot] = field(
-        init=False, repr=False, hash=False, compare=False, default_factory=list
-    )
+    snapshots: List[HistorySnapshot] = field(init=False, repr=False, hash=False, compare=False, default_factory=list)
 
     def __post_init__(self, path: Path) -> None:
         self.source_file = path
         self.target_file = Path(urlparse(self.resource).path)
-        self.snapshots = [
-            HistorySnapshot.from_dict(d, path=path.parent) for d in self.entries
-        ]
+        self.snapshots = [HistorySnapshot.from_dict(d, path=path.parent) for d in self.entries]
 
     def __len__(self) -> int:
         return len(self.snapshots)
@@ -123,9 +121,7 @@ class HistoryRecord(ExtendedDataclass):
         matched = filter(fn, self.snapshots)
         reverse_order = False if order == HistorySortOrder.OLDEST else True
         try:
-            yield list(
-                sorted(matched, key=lambda o: o.timestamp, reverse=reverse_order)
-            )
+            yield list(sorted(matched, key=lambda o: o.timestamp, reverse=reverse_order))
         finally:
             pass
 
@@ -141,9 +137,7 @@ class HistoryStreamer:
             with history_file.open(mode="r") as fp:
                 try:
                     history_contents = json.load(fp)
-                    history_record = HistoryRecord.from_dict(
-                        history_contents, path=history_file
-                    )
+                    history_record = HistoryRecord.from_dict(history_contents, path=history_file)
                     self.records.append(history_record)
                 except Exception:
                     warnings.warn(
@@ -159,9 +153,7 @@ class HistoryStreamer:
         self.records_written += 1
 
     @contextmanager
-    def filter(
-        self, fn: Callable[[HistoryRecord], bool]
-    ) -> Iterator[List[HistoryRecord]]:
+    def filter(self, fn: Callable[[HistoryRecord], bool]) -> Iterator[List[HistoryRecord]]:
         matched = filter(fn, self.records)
         try:
             yield list(sorted(matched, key=lambda o: str(o.target_file)))

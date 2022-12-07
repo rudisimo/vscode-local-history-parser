@@ -1,0 +1,54 @@
+{
+    "id": "feature-configure-user",
+    "version": "0.1.0",
+    "name": "Configure User",
+    "description": "Creates a non-root user with sensible shell defaults.",
+    "options": {
+        "username": {
+            "type": "string",
+            "proposals": [
+                "vscode",
+                "automatic"
+            ],
+            "default": "automatic",
+            "description": "Enter name of non-root user"
+        },
+        "uid": {
+            "type": "string",
+            "proposals": [
+                "1000",
+                "automatic"
+            ],
+            "default": "automatic",
+            "description": "Enter user ID for non-root user"
+        },
+        "gid": {
+            "type": "string",
+            "proposals": [
+                "1000",
+                "automatic"
+            ],
+            "default": "automatic",
+            "description": "Enter group ID for non-root user"
+        },
+        "shell": {
+            "type": "string",
+            "proposals": [
+                "zsh",
+                "bash",
+                "automatic"
+            ],
+            "default": "automatic",
+            "description": "Enter shell for non-root user"
+        },
+        "install_ohmyzsh": {
+            "type": "boolean",
+            "default": false,
+            "description": "Install Oh My Zsh?"
+        },
+        "create_volume_mounts": {
+            "type": "string",
+            "description": "Create volume mounts for non-root user"
+        }
+    }
+}

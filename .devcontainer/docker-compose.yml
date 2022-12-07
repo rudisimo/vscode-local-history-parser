@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  workspace:
+    # Note that the path of the Dockerfile and context is relative to the *primary*
+    # docker-compose.yml file (the first in the devcontainer.json "dockerComposeFile" array).
+    # Reference: https://docs.docker.com/compose/compose-file/compose-file-v3/#build
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Debian-based image
+        - VARIANT=bullseye-slim
+
+        # Default package versions
+        - PYTHON_VERSION=latest
+
+    # Reference: https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes
+    volumes:
+      # Forwards the local Docker socket to the container (Docker-from-Docker).
+      - /var/run/docker.sock:/var/run/docker-host.sock
+
+      # This is where VS Code should expect to find your project's source code and the value of
+      # "workspaceFolder" in .devcontainer/devcontainer.json.
+      - ..:/workspace:cached
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: /bin/sh -c "while sleep 1000; do :; done"

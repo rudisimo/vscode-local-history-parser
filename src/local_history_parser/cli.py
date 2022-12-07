@@ -1,17 +1,18 @@
 import logging
-from argparse import ArgumentParser, FileType
+
+from argparse import ArgumentParser
+from argparse import FileType
 from pathlib import Path
 from sys import stdout
 from zoneinfo import ZoneInfo
 
 from . import VERSION
-from .history import (
-    HistorySortOrder,
-    HistoryStreamer,
-    build_record_filter,
-    build_snapshot_filter,
-)
+from .history import HistorySortOrder
+from .history import HistoryStreamer
+from .history import build_record_filter
+from .history import build_snapshot_filter
 from .util import setup_logging
+
 
 LOGGER = logging.getLogger(__name__)
 TZINFO = ZoneInfo("America/New_York")
@@ -21,9 +22,7 @@ def build_parser() -> ArgumentParser:
     parser = ArgumentParser(prog="lhp", description="Parse local history files.")
 
     # Default arguments
-    parser.add_argument(
-        "-V", "--version", action="version", version=f"%(prog)s {VERSION}"
-    )
+    parser.add_argument("-V", "--version", action="version", version=f"%(prog)s {VERSION}")
     parser.add_argument(
         "path",
         type=Path,
@@ -119,14 +118,10 @@ def main():
         for _, record in enumerate(filtered_records):
             LOGGER.info("Processing history record: %s", record.source_file)
             LOGGER.debug("%s", record)
-            LOGGER.info(
-                "Found %d history snapshot(s) for %s", len(record), record.target_file
-            )
+            LOGGER.info("Found %d history snapshot(s) for %s", len(record), record.target_file)
 
             # Filter local history snapshots
-            snapshot_filter = build_snapshot_filter(
-                since=args.filter_since, until=args.filter_until
-            )
+            snapshot_filter = build_snapshot_filter(since=args.filter_since, until=args.filter_until)
             with record.filter(snapshot_filter, order=args.filter_order) as snapshots:
                 LOGGER.info("Filtered %d history snapshot(s)", len(snapshots))
 
@@ -136,9 +131,7 @@ def main():
                     LOGGER.debug("%s", snapshot)
 
                     # Write the history snapshot to the output stream
-                    streamer.write(
-                        f"{record.target_file},{snapshot.source_file},{snapshot.created_on}"
-                    )
+                    streamer.write(f"{record.target_file},{snapshot.source_file},{snapshot.created_on}")
 
                     # Process a single history snapshot when using order filter
                     if snapshot_idx == 0 and args.filter_order is not None:

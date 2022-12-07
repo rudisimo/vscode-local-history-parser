@@ -1,4 +1,6 @@
-from dataclasses import asdict, dataclass, fields
+from dataclasses import asdict
+from dataclasses import dataclass
+from dataclasses import fields
 from typing import Any, Mapping
 
 from .util import dict_factory

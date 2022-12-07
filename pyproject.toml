@@ -1,3 +1,69 @@
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.isort]
+profile = "black"
+line_length = 120
+lines_between_types = 1
+lines_after_imports = 2
+combine_as_imports = true
+force_single_line = true
+known_first_party = ["aoc", "tests"]
+single_line_exclusions = ["typing"]
+
+[tool.black]
+line-length = 120
+target-version = ["py310"]
+include = "\\.pyi?$"
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.pytest_cache
+  | \.tox
+  | \.venv
+  | __pycache__
+  | _build
+  | build
+  | dist
+)/
+'''
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = ["--strict-config", "--strict-markers", "--no-cov-on-fail", "-rpfE", "-q"]
+testpaths = ["tests"]
+xfail_strict = true
+
+[tool.coverage.run]
+branch = true
+parallel = true
+plugins = ["covdefaults"]
+source = ["local_history_parser", "tests"]
+
+[tool.coverage.paths]
+build = [
+  "src",
+  "*/site-packages",
+  '*\site-packages',
+]
+
+[tool.coverage.report]
+ignore_errors = true
+show_missing = true
+skip_covered = true
+skip_empty = true
+omit = [
+  "tests/*",
+]
+exclude_lines = []
+
+[tool.coverage.html]
+show_contexts = true
+
+[tool.pyright]
+include = ["src"]
+ignore = ["setup.py", "tests/*"]
